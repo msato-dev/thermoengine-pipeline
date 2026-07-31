@@ -19,7 +19,7 @@ def run_case(input_path, output_path):
 
     try:
         run_thermoengine.export_result_json(result, tmp_output_path)
-        tmp_output_path.replace(ouput_path)
+        tmp_output_path.replace(output_path)
     finally:
         tmp_output_path.unlink(missing_ok=True)
 

@@ -1,12 +1,29 @@
 import json
 from pathlib import Path
+from pprint import pprint
 
 import numpy as np
-from pprint import pprint
 from thermoengine import equilibrate, model, phases
 from thermoengine.chemistry import OxideWtComp
 
-ELEMENTS = ('H', "C", 'O','Na','Mg','Al','Si','P','K','Ca','Ti','Cr','Mn','Fe','Co','Ni')
+ELEMENTS = (
+    "H",
+    "C",
+    "O",
+    "Na",
+    "Mg",
+    "Al",
+    "Si",
+    "P",
+    "K",
+    "Ca",
+    "Ti",
+    "Cr",
+    "Mn",
+    "Fe",
+    "Co",
+    "Ni",
+)
 
 PROPERTY_NAMES = (
     "Mass",
@@ -31,7 +48,7 @@ PROPERTY_NAMES = (
 
 def load_input_json(path):
     # Load input file
-    with open(path) as f:
+    with path.open("r", encoding="utf-8") as f:
         input_data = json.load(f)
     return input_data
 
@@ -84,7 +101,7 @@ def run_equilibrium(input_data):
     return state
 
 def generate_result(input_data, state):
-    def _get_states(input_data):
+    def _get_states(input_data, state):
         states = {
             "case_id": input_data["case_id"],
             "temperature_K": float(state.temperature),
@@ -113,7 +130,7 @@ def generate_result(input_data, state):
         return oxides_mass
 
     result = {}
-    result["State"] = _get_states(input_data)
+    result["State"] = _get_states(input_data, state)
     result["System"] = _get_properties(state, "System")
 
     def _get_stable_phase_names(state):
@@ -139,7 +156,7 @@ def export_result_json(result, path):
 
 def main():
     # Set input and output json path
-    input_json_path = "input/input_000001.json"
+    input_json_path = Path("input/input_000003.json")
     input_data = load_input_json(input_json_path)
     output_json_dir = Path("output")
     output_json_path = output_json_dir / f"out_{input_data['case_id']}.json"
