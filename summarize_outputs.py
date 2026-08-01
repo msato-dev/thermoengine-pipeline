@@ -41,7 +41,6 @@ PHASE_ALIASES = {
     "Water": "h2o",
 }
 
-
 PROPERTY_COLUMNS = {
     "Mass": "mass_g",
     "GibbsFreeEnergy": "gibbs_free_energy_J",
@@ -63,7 +62,6 @@ PROPERTY_COLUMNS = {
     "Gamma": "gamma",
 }
 
-
 SPECIFIC_PROPERTIES = {
     "GibbsFreeEnergy": "gibbs_free_energy_J_per_kg",
     "Enthalpy": "enthalpy_J_per_kg",
@@ -71,7 +69,6 @@ SPECIFIC_PROPERTIES = {
     "HeatCapacity": "heat_capacity_J_per_kg_K",
     "DcpDt": "dcp_dt_J_per_kg_K2",
 }
-
 
 def load_json(path):
     with path.open("r", encoding="utf-8") as f:

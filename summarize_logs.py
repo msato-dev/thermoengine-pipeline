@@ -2,7 +2,6 @@ import csv
 import json
 from pathlib import Path
 
-
 BASE_DIR = Path(__file__).resolve().parent
 INPUT_DIR = BASE_DIR / "input"
 LOG_DIR = BASE_DIR / "log"
@@ -80,9 +79,9 @@ def make_row(log_path):
         "status": log_data.get("status", ""),
         "timed_out": log_data.get("timed_out", ""),
         "elapsed_seconds": log_data.get("elapsed_seconds", ""),
-        "T_C": float(input_data["temperature_K"]) - 273.15,
-        "P_MPa": float(input_data["pressure_Pa"]) / 1.0e6,
-        "delta_nno": float(input_data["delta_nno"]),
+        "T_C": float(input_data["T_K"]) - 273.15,
+        "P_MPa": float(input_data["P_Pa"]) / 1.0e6,
+        "delta_nno": float(input_data["dNNO"]),
         "SiO2_mass": float(oxides_mass["SiO2"]),
         "H2O_mass": float(oxides_mass["H2O"]),
     }

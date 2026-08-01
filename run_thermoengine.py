@@ -54,9 +54,9 @@ def load_input_json(path):
 
 def run_equilibrium(input_data):
     # Extract input parameters
-    temperature_K = input_data["temperature_K"]
-    pressure_bar = input_data["pressure_Pa"] / 1e5
-    delta_nno = input_data["delta_nno"]
+    T_K = input_data["T_K"]
+    P_bar = input_data["P_Pa"] / 1e5
+    dNNO = input_data["dNNO"]
     phase_symbols = input_data["phases"]
     oxides_mass = input_data["oxides_mass"]
 
@@ -91,10 +91,10 @@ def run_equilibrium(input_data):
 
     # Execute equilibrium calculation
     state = equil.execute(
-        temperature_K,
-        pressure_bar,
+        T_K,
+        P_bar,
         bulk_comp=bulk_comp,
-        con_deltaNNO=delta_nno,
+        con_deltaNNO=dNNO,
         debug=0,
         stats=False
         )
@@ -103,9 +103,9 @@ def run_equilibrium(input_data):
 def generate_result(input_data, state):
     def _get_states(input_data, state):
         states = {
-            "case_id": input_data["case_id"],
-            "temperature_K": float(state.temperature),
-            "pressure_MPa": float(state.pressure) / 10.0
+            "ID": int(input_data["ID"]),
+            "T_K": float(state.temperature),
+            "P_Pa": float(state.pressure) * 1e5
         }
         return states
 
@@ -156,10 +156,10 @@ def export_result_json(result, path):
 
 def main():
     # Set input and output json path
-    input_json_path = Path("input/input_000003.json")
+    input_json_path = Path("input/input_000017.json")
     input_data = load_input_json(input_json_path)
     output_json_dir = Path("output")
-    output_json_path = output_json_dir / f"out_{input_data['case_id']}.json"
+    output_json_path = output_json_dir / f"output_{int(input_data['ID']):06d}.json"
 
     # Run equilibrium calculation
     state = run_equilibrium(input_data)

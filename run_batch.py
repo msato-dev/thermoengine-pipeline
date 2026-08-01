@@ -4,6 +4,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -14,6 +15,9 @@ WRAPPER_PATH = BASE_DIR / "wrap_case.py"
 
 TIMEOUT_SECONDS = 600
 TERMINATE_GRACE_SECONDS = 5
+
+# parallel 
+MAX_WORKERS = 4
 
 
 def stop_process_group(process):
@@ -100,10 +104,18 @@ def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
     LOG_DIR.mkdir(exist_ok=True)
 
-    for input_path in sorted(INPUT_DIR.glob("input_*.json")):
-        status, elapsed_seconds = run_case(input_path)
-        print(f"{input_path.name}: {status} ({elapsed_seconds:.1f} s)")
+    input_paths = sorted(INPUT_DIR.glob("input_*.json"))
 
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        futures = {
+            executor.submit(run_case, input_path): input_path
+            for input_path in input_paths
+        }
+
+        for future in as_completed(futures):
+            input_path = futures[future]
+            status, elapsed_seconds = future.result()
+            print(f"{input_path.name}: {status} ({elapsed_seconds:.1f} s)")
 
 if __name__ == "__main__":
     main()
